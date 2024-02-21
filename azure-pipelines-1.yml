@@ -1,0 +1,16 @@
+trigger:
+  branches:
+    include:
+      - main  # Trigger on pushes to the main branch
+
+steps:
+  # Existing pipeline steps...
+
+  - task: AzureCLI@2
+    displayName: Run GitHub Workflow
+    inputs:
+      script: >
+        gh workflow run
+        -n "Build and deploy ASP.Net Core app to Azure Web App - team4-game-developmen"
+        -r "SE-Team-4-2024"
+        -R "Software_Engineering_Project_Team_4_Spring_2024"
