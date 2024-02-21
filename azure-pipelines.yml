@@ -11,7 +11,7 @@ steps:
     git config --global user.email "gowthamkishore3@gmail.com"
     git config --global user.name "gowthamkishore3799"
     git clone https://github.com/SE-Team-4-2024/Software_Engineering_Spring_2024_Project
-    cd Software_Engineering_Spring_2024_Project
+    cd Fin-tastic_Division
     # Copy files from Azure to GitHub directory
     git add .
     git commit -m "Sync changes from Azure to GitHub"
