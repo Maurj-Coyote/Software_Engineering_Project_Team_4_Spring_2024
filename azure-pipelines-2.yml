@@ -1,23 +1,34 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
-
 trigger:
-- '*'
-steps:
-- checkout: self
+  branches:
+    include:
+      - main
 
-- script: |
-    git clone https://008443260-Student@dev.azure.com/008443260-Student/Software_Engineering_Spring_2024_Project/_git/Fin-tastic_Division
-    cd Fin-tastic_Division
-    git config user.email "008456949@coyote.csusb.edu"
-    git config user.name "008456949"
-    git remote add github https://github.com/SE-Team-4-2024/Fin-tastic_Division.git
-    git pull origin --all  # Fetch all branches from Azure Repo
-    for branch in $(git branch -r | grep -v HEAD); do  # Iterate over all branches
-        branch_name=$(echo $branch | sed 's/.*\///')  # Extract branch name
-        git checkout -B $branch_name origin/$branch_name  # Checkout the branch
-        git push github $branch_name  # Push the branch to GitHub
-    done
-  displayName: 'Sync Azure Repo to GitHub for all branches'
+pr:
+  branches:
+    include:
+      - '*'
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+  - task: AzureCLI@2
+    inputs:
+      azureSubscription: 'YourAzureSubscription'
+      scriptType: 'bash'
+      scriptLocation: 'inlineScript'
+      inlineScript: |
+        # Clone the repository
+        git clone https://008443260-Student@dev.azure.com/008443260-Student/Software_Engineering_Spring_2024_Project/_git/Fin-tastic_Division
+
+        # Authenticate with GitHub using Personal Access Token (PAT)
+        git config --global user.name "008456949"
+        git config --global user.email "008456949@coyote.csusb.edu"
+        git config --global credential.helper store
+        git config --global credential.github.com.token "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"
+
+        # Push changes to GitHub
+        cd Fin-tastic_Division
+        git add .
+        git commit -m "Automated pipeline update"
+        git push origin main
